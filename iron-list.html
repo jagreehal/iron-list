@@ -1746,6 +1746,10 @@ will only render 20.
       return this._physicalIndexForKey[this._collection.getKey(this._getNormalizedItem(idx))];
     },
 
+    focusItem: function(idx) {
+      this._focusPhysicalItem(idx);
+    },
+
     _focusPhysicalItem: function(idx) {
       if (idx < 0 || idx >= this._virtualCount) {
         return;
@@ -1784,6 +1788,7 @@ will only render 20.
       this._focusBackfillItem = null;
       this._focusedItem = null;
       this._focusedIndex = -1;
+      document.body.focus();
     },
 
     _createFocusBackfillItem: function() {
@@ -1848,7 +1853,7 @@ will only render 20.
       var hasOffscreenFocusedItem = this._offscreenFocusedItem !== null;
       var fidx = this._focusedIndex;
 
-      if (!targetModel || !focusedModel) {
+      if (!targetModel) {
         return;
       }
       if (focusedModel === targetModel) {
@@ -1859,7 +1864,9 @@ will only render 20.
       } else {
         this._restoreFocusedItem();
         // restore tabIndex for the currently focused item
-        focusedModel.tabIndex = -1;
+        if (focusedModel) {
+          focusedModel.tabIndex = -1;
+        }
         // set the tabIndex for the next focused item
         targetModel.tabIndex = 0;
         fidx = targetModel[this.indexAs];
